@@ -1,11 +1,3 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
 
 library(shiny)
 library(shinyWidgets)
@@ -13,6 +5,7 @@ require(tidyverse)
 require(PandemicLP)
 require(shinycssloaders)
 require(shinydashboard)
+require(shinyBS)
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   
@@ -45,109 +38,45 @@ ui <- fluidPage(
     style = "padding: 20px"
   ),
   fluidRow(
-    align = "center",
-   
-    column (width=6,
-            selectInput(
-      inputId = "pais",
-      label = NULL,
-      choices = c(
-        "Argentina",
-        "Australia",
-        "Belgium",
-        "Bolivia",
-        "Brazil",
-        "Canada",
-        "Chile",
-        "China",
-        "Colombia",
-        "Costa Rica",
-        "Ecuador",
-        "Ethiopia",
-        "France",
-        "Germany",
-        "Greece",
-        "Guatemala",
-        "Honduras",
-        "India",
-        "Indonesia",
-        "Iraq",
-        "Ireland",
-        "Italy",
-        "Japan",
-        "Mexico",
-        "Morocco",
-        "Netherlands",
-        "New Zealand",
-        "Norway",
-        "Panama",
-        "Paraguay",
-        "Peru",
-        "Poland",
-        "Portugal",
-        "Romania",
-        "Russia",
-        "Saudi Arabia",
-        "South Africa",
-        "South Korea",
-        "Spain",
-        "Sweden",
-        "Switzerland",
-        "Turkey",
-        "Ukraine",
-        "United Kingdom",
-        "United States of America",
-        "Uruguay",
-        "Venezuela"
-      ) ,
-      selected = "Brazil",
+    HTML('<center>'),
+    column(width=5,
+           align='right',
+           div(
+      class = "btn_div",
+      shinyWidgets::pickerInput(inputId = "pais", label = NULL,
+                                choices =c(
+                                  "Argentina", "Australia","Belgium",
+                                  "Bolivia","Brazil", "Canada",
+                                  "Chile","China","Colombia",
+                                  "Costa Rica","Ecuador","Ethiopia",
+                                  "France","Germany","Greece","Guatemala",
+                                  "Honduras","India","Indonesia",
+                                  "Iraq","Ireland","Italy",
+                                  "Japan","Mexico","Morocco",
+                                  "Netherlands","New Zealand","Norway",
+                                  "Panama","Paraguay","Peru",
+                                  "Poland","Portugal","Romania",
+                                  "Russia","Saudi Arabia","South Africa",
+                                  "South Korea","Spain","Sweden",
+                                  "Switzerland","Turkey","Ukraine",
+                                  "United Kingdom","United States of America",
+                                  "Uruguay","Venezuela"
+                                ) ,
+                                selected = "Brazil")
     )),
-    conditionalPanel(
-      condition = "input.pais == 'Brazil'",
-      column(width=6,
-        selectInput(
-        inputId = "state",
-        label = NULL,
-        choices = c(
-          "Todos os estados",
-          "AC",
-          "AL",
-          "AM",
-          "AP",
-          "BA",
-          "CE",
-          "DF",
-          "ES",
-          "GO",
-          "MA",
-          "MG",
-          "MS",
-          "MT",
-          "PA",
-          "PB",
-          "PE",
-          "PI",
-          "PR",
-          "RJ",
-          "RN",
-          "RO",
-          "RR",
-          "RS",
-          "SC",
-          "SE",
-          "SP",
-          "TO"
-        ) ,
-        selected = "Todos os estados",
-      ))
-    )
+    column(width = 2,
+           align="center",
+           div(
+             class = "btn_div",
+             tipify(bsButton("pB2", "?", style = "inverse", size = "extra-small"), HTML("Selecione o país e o estado de interesse! <br> Select a country and a state!"))
+           )),
+    column(width=5,
+           align='left',
+           div(
+      class = "btn_div",
+      shinyWidgets::pickerInput(inputId = "state", label = NULL, choices = "<all>", selected = "<all>"),
+    ))),
     
-    
-    
-    
-    
-    
-  ),
   fluidRow(
     align = "center",
     switchInput(
@@ -167,51 +96,114 @@ ui <- fluidPage(
     sliderTextInput(
       "bins",
       "Data:",
-      choices = names(readRDS("Venezuela_n_graph.rds")),
+      choices = names(readRDS(as.character("Brazil_n_graph.rds"))),
       animate = animationOptions(
         interval = 500,
         loop = FALSE,
         playButton = NULL,
         pauseButton = NULL
       )
-      #grid=TRUE
-    ),
+      
+    )
     
-  )
-)
+  ))
+
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
-  arquivo = reactive({
-    if (input$pais == "Brazil") {
-      if (input$state != "Todos os estados") {
-        startfile = "Brazil_"
-        if (input$tipo_data == TRUE) {
-          endfile = "_ne_graph.rds"
-        } else{
-          endfile = "_de_graph.rds"
-        }
-        arquivo = paste0(startfile, as.character(input$state), endfile)
+server <- function(input, output,session) {
+  
+  observeEvent(input$pais, {
+    if(input$pais == "Brazil") {
+      states <-c("AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT","PA",
+                 "PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO")
+    } else { 
+        states <- NULL
+    }
+    
+    states <- c("<all>", states)
+    sel <- ifelse(input$state %in% states, input$state, "<all>")
+    
+    updatePickerInput(session = session, inputId = "state", choices = states, selected = sel)
+  })
+  
+  
+  observeEvent(c(input$pais,input$state,input$tipo_data), {
+
+    if (input$pais!="Brazil") {
+      if (input$tipo_data == TRUE) {
+        choices = names(readRDS(paste0(str_replace(input$pais," ","-"), "_n_graph.rds")))
       } else{
-        if (input$tipo_data == TRUE) {
-          endfile = "_n_graph.rds"
-        } else{
-          endfile = "_d_graph.rds"
-        }
-        arquivo = paste0(as.character(input$pais), endfile)
+        choices =names( readRDS(paste0(str_replace(input$pais," ","-"), "_d_graph.rds")))
       }
+    }
+    
+    else if (input$state=="<all>") {
+      if (input$tipo_data == TRUE) {
+        
+        choices = names(readRDS(paste0(str_replace(input$pais," ","-"), "_n_graph.rds")))
+        
+      } else{
+        
+        choices = names(readRDS(paste0(str_replace(input$pais," ","-"), "_d_graph.rds")))
+        
+      }
+     
+    } else{
       
-    } else {
+      if (input$tipo_data == TRUE) {
+        
+        choices = names(readRDS(paste0(input$pais,"_",input$state, "_ne_graph.rds")))
+        
+      } else{
+        choices = names(readRDS(paste0(input$pais,"_",input$state, "_de_graph.rds")))
+      }
+    }
+    updateSliderTextInput(
+      session = session,
+      inputId = "bins",
+      choices = choices
+    )
+  }, ignoreInit = TRUE)
+  
+  
+  arquivo = reactive({
+    pais=as.character(input$pais)
+    pais=str_replace(pais," ","-")
+    if (pais!="Brazil") {
       if (input$tipo_data == TRUE) {
         endfile = "_n_graph.rds"
       } else{
         endfile = "_d_graph.rds"
       }
-      arquivo = paste0(as.character(input$pais), endfile)
+      arquivo = paste0(pais, endfile)
     }
-    
+    else if (input$state=="<all>") {
+      if (input$tipo_data == TRUE) {
+        endfile = "_n_graph.rds"
+      } else{
+        endfile = "_d_graph.rds"
+      }
+      arquivo = paste0(pais, endfile)
+    } else{
+      startfile = paste0(pais,"_")
+      state=as.character(input$state)
+      if (input$tipo_data == TRUE) {
+        endfile = "_ne_graph.rds"
+      } else{
+        endfile = "_de_graph.rds"
+      }
+      
+      arquivo = paste0(startfile, state, endfile)
+    }
     return(arquivo)
   })
+  
+ 
+
+
+  
+  
+
   
   
   output$distPlot <- renderPlot({
