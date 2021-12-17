@@ -131,20 +131,20 @@ server <- function(input, output,session) {
 
     if (input$pais!="Brazil") {
       if (input$tipo_data == TRUE) {
-        choices = names(readRDS(paste0(str_replace(input$pais," ","-"), "_n_graph.rds")))
+        choices = names(readRDS(paste0(str_replace_all(input$pais," ","-"), "_n_graph.rds")))
       } else{
-        choices =names( readRDS(paste0(str_replace(input$pais," ","-"), "_d_graph.rds")))
+        choices =names( readRDS(paste0(str_replace_all(input$pais," ","-"), "_d_graph.rds")))
       }
     }
     
     else if (input$state=="<all>") {
       if (input$tipo_data == TRUE) {
         
-        choices = names(readRDS(paste0(str_replace(input$pais," ","-"), "_n_graph.rds")))
+        choices = names(readRDS(paste0(str_replace_all(input$pais," ","-"), "_n_graph.rds")))
         
       } else{
         
-        choices = names(readRDS(paste0(str_replace(input$pais," ","-"), "_d_graph.rds")))
+        choices = names(readRDS(paste0(str_replace_all(input$pais," ","-"), "_d_graph.rds")))
         
       }
      
@@ -168,7 +168,7 @@ server <- function(input, output,session) {
   
   arquivo = reactive({
     pais=as.character(input$pais)
-    pais=str_replace(pais," ","-")
+    pais=str_replace_all(pais," ","-")
     if (pais!="Brazil") {
       if (input$tipo_data == TRUE) {
         endfile = "_n_graph.rds"
