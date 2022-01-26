@@ -53,6 +53,8 @@ for(location in files){
 
 ## ----- UPDATING GRAPHS ----- 
 
+# init = Sys.time()
+
 last.date = as.Date("2022-12-31")
 
 for(country in countries_orig){
@@ -367,3 +369,4 @@ for(state in statesBR){
   
 }
 
+# Sys.time() - init
