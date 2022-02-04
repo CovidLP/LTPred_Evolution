@@ -1,0 +1,14 @@
+name: LTPred_Evolution
+title: LTPred_Evolution
+username:
+account: izabelnolau
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5578989
+bundleId: 5540937
+url: https://izabelnolau.shinyapps.io/LTPred_Evolution/
+when: 1643939987.38418
+lastSyncTime: 1643939987.38418
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: app.R|UpdateCode.R|UpdateCode+.R|Graphs|History
