@@ -197,7 +197,6 @@ server <- function(input, output,session) {
     }
     return(arquivo)
   })
-  
   output$distPlot <- renderPlot({
     ajustes <- readRDS(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/Graphs/",as.character(arquivo()))))
     seqDate = names(ajustes)

@@ -27,29 +27,29 @@ statesBR <- sort(statesBR)[-1]
 
 ## ----- UPDATING HISTORY ----- 
 
-for(location in files){ 
-  
-  rds = readRDS(paste0("History/", location))
-  date = names(rds)
-  
-  rds.aux = readRDS(url(paste0("https://github.com/CovidLP/app_COVID19/raw/master/STpredictions/", location)))
-  
-  date.aux = as.character(rds.aux$df_predict[1]$date[1])
-  if(!is.element(date.aux, date)){
-    date = c(date, date.aux) # primeiro tempo de previsao
-    rds = c(rds, list(rds.aux))
-  }
-  
-  order = order(date)
-  date = date[order]
-  rds = rds[order]
-  names(rds) = date
-  
-  saveRDS(rds, paste0("History/", location))
-  
-  closeAllConnections()
-  
-}
+# for(location in files){
+#   
+#   rds = readRDS(paste0("History/", location))
+#   date = names(rds)
+#   
+#   rds.aux = readRDS(url(paste0("https://github.com/CovidLP/app_COVID19/raw/master/STpredictions/", location)))
+#   
+#   date.aux = as.character(rds.aux$df_predict[1]$date[1])
+#   if(!is.element(date.aux, date)){
+#     date = c(date, date.aux) # primeiro tempo de previsao
+#     rds = c(rds, list(rds.aux))
+#   }
+#   
+#   order = order(date)
+#   date = date[order]
+#   rds = rds[order]
+#   names(rds) = date
+#   
+#   saveRDS(rds, paste0("History/", location))
+#   
+#   closeAllConnections()
+#   
+# }
 
 ## ----- UPDATING GRAPHS ----- 
 
@@ -252,72 +252,71 @@ plot_graph2 = function(ajuste, dates, dates_14, seq_y, lab_y){
 
 last.date = as.Date("2022-12-31")
 
-for(country in countries_orig){
-  for(confirmed in c(TRUE, FALSE)){
-    
-    if(confirmed){
-      rds.name = "n"
-      title.name = "- Casos confirmados/Confirmed cases"
-    } else{
-      rds.name = "d"
-      title.name = "- Mortes/Deaths"
-    }
-    
-    local_rds = str_replace_all(country, " ", "-")
-    
-    data = load_covid(country)$data
-    
-    # Reading rds e downloading data
-    if(confirmed){ data = data %>% select(date, y = new_cases) } else{ data = data %>% select(date, y = new_deaths) }
-    rds_completo = readRDS(paste0("History/", local_rds, "_", rds.name, ".rds"))
-    
-    # Quantidades importantes
-    n_ajustes = length(rds_completo)
-    dates_1  = seq.Date(data$date[1], last.date, by = 1)
-    dates_14 = seq.Date(data$date[1], last.date, by = 14)
-    dates_30 = seq.Date(data$date[1], last.date, by = 30)
-    dates = data.frame(date = dates_1)
-    max_data = max(data[, "y"])
-    max_mu = unlist(lapply(rds_completo, function(x) max(x$mu_plot[, "mu"])))
-    y_max = max(max_data, quantile(na.omit(max_mu), 0.80))
-    
-    if(ceiling(y_max/10) < 10){ # 1 a 99
-      seq_y = seq(0, ceiling(y_max/10)*10, l = 11)
-      if(sum(seq_y[-1]/1000 < 1) > 0){ lab_y = seq_y } else{ lab_y = ifelse(seq_y/1000 < 1, seq_y, paste(seq_y/1000, "k", sep = "")) }
-    } else if(ceiling(y_max/100) < 10){ # 100 a 999
-      seq_y = seq(0, ceiling(y_max/100)*100, l = 11)
-      if(sum(seq_y[-1]/1000 < 1) > 0){ lab_y = seq_y } else{ lab_y = ifelse(seq_y/1000 < 1, seq_y, paste(seq_y/1000, "k", sep = "")) }
-    } else{ # 1000 a 9999
-      seq_y = seq(0, ceiling(y_max/1000)*1000, l = 11)
-      if(sum(seq_y[-1]/1000 < 1) > 0){ lab_y = seq_y } else{ lab_y = ifelse(seq_y/1000 < 1, seq_y, paste(seq_y/1000, "k", sep = "")) }
-    }
-    
-    y_max = max(seq_y)
-    graphs = list()
-    
-    for(i in 1:n_ajustes){
-      
-      ajuste = rds_completo[[i]]
-      
-      # plot.new()
-      plot_graph1(ajuste, dates, dates_14, seq_y, lab_y)
-      
-      aux.graph = recordPlot()
-      
-      graphs[[i]] = recordPlot()
-      
-    }
-    
-    names(graphs) = names(rds_completo)
-    
-    saveRDS(graphs, paste0("Graphs/", local_rds, "_", rds.name, "_graph.rds"))
-    
-  }
-  
-  closeAllConnections()
-  # print(country)
-  
-}
+# for(country in countries_orig){
+#   for(confirmed in c(TRUE, FALSE)){
+#     
+#     if(confirmed){
+#       rds.name = "n"
+#       title.name = "- Casos confirmados/Confirmed cases"
+#     } else{
+#       rds.name = "d"
+#       title.name = "- Mortes/Deaths"
+#     }
+#     
+#     local_rds = str_replace_all(country, " ", "-")
+#     
+#     data = load_covid(country)$data
+#     
+#     # Reading rds e downloading data
+#     if(confirmed){ data = data %>% select(date, y = new_cases) } else{ data = data %>% select(date, y = new_deaths) }
+#     rds_completo = readRDS(paste0("History/", local_rds, "_", rds.name, ".rds"))
+#     
+#     # Quantidades importantes
+#     n_ajustes = length(rds_completo)
+#     dates_1  = seq.Date(data$date[1], last.date, by = 1)
+#     dates_14 = seq.Date(data$date[1], last.date, by = 14)
+#     dates_30 = seq.Date(data$date[1], last.date, by = 30)
+#     dates = data.frame(date = dates_1)
+#     max_data = max(data[, "y"])
+#     max_mu = unlist(lapply(rds_completo, function(x) max(x$mu_plot[, "mu"])))
+#     y_max = max(max_data, quantile(na.omit(max_mu), 0.80))
+#     
+#     if(ceiling(y_max/10) < 10){ # 1 a 99
+#       seq_y = seq(0, ceiling(y_max/10)*10, l = 11)
+#       if(sum(seq_y[-1]/1000 < 1) > 0){ lab_y = seq_y } else{ lab_y = ifelse(seq_y/1000 < 1, seq_y, paste(seq_y/1000, "k", sep = "")) }
+#     } else if(ceiling(y_max/100) < 10){ # 100 a 999
+#       seq_y = seq(0, ceiling(y_max/100)*100, l = 11)
+#       if(sum(seq_y[-1]/1000 < 1) > 0){ lab_y = seq_y } else{ lab_y = ifelse(seq_y/1000 < 1, seq_y, paste(seq_y/1000, "k", sep = "")) }
+#     } else{ # 1000 a 9999
+#       seq_y = seq(0, ceiling(y_max/1000)*1000, l = 11)
+#       if(sum(seq_y[-1]/1000 < 1) > 0){ lab_y = seq_y } else{ lab_y = ifelse(seq_y/1000 < 1, seq_y, paste(seq_y/1000, "k", sep = "")) }
+#     }
+#     
+#     y_max = max(seq_y)
+#     graphs = list()
+#     
+#     for(i in 1:n_ajustes){
+#       
+#       ajuste = rds_completo[[i]]
+#       
+#       # plot.new()
+#     
+#       aux.graph %<a-% { plot_graph1(ajuste, dates, dates_14, seq_y, lab_y) }
+#       
+#       graphs[[i]] = recordPlot()
+#       
+#     }
+#     
+#     names(graphs) = names(rds_completo)
+#     
+#     saveRDS(graphs, paste0("Graphs/", local_rds, "_", rds.name, "_graph.rds"))
+#     
+#   }
+#   
+#   closeAllConnections()
+#   # print(country)
+#   
+# }
 
 for(state in statesBR){
   for(confirmed in c(TRUE, FALSE)){
@@ -367,9 +366,8 @@ for(state in statesBR){
       ajuste = rds_completo[[i]]
       
       # plot.new()
-      plot_graph2(ajuste, dates, dates_14, seq_y, lab_y)
       
-      aux.graph = recordPlot()
+      aux.graph %<a-% { plot_graph2(ajuste, dates, dates_14, seq_y, lab_y) }
       
       graphs[[i]] = aux.graph
       
