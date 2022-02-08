@@ -90,15 +90,15 @@ ui <- fluidPage(
   
   # Show a plot of the generated distribution
   fluidRow(align = "center",
-           imageOutput("distPlot")),
+           uiOutput("distPlot")),
   fluidRow(
     align = "center",
     sliderTextInput(
       "bins",
       "Data:",
-      choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/Brazil_n/date.vector.txt")),
+      choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/Brazil_n/date.vector.txt"))$V1,
       animate = animationOptions(
-        interval = 500,
+        interval = 1000,
         loop = FALSE,
         playButton = NULL,
         pauseButton = NULL
@@ -131,20 +131,20 @@ server <- function(input, output, session) {
     
     if (input$pais!="Brazil") {
       if (input$tipo_data == TRUE) {
-        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/date.vector.txt"))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/date.vector.txt"))$V1
       } else{
-        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_d/date.vector.txt"))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_d/date.vector.txt"))$V1
       }
     }
     
     else if (input$state=="<all>") {
       if (input$tipo_data == TRUE) {
         
-        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/date.vector.txt"))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/date.vector.txt"))$V1
         
       } else{
         
-        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_d/date.vector.txt"))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_d/date.vector.txt"))$V1
         
       }
       
@@ -152,11 +152,11 @@ server <- function(input, output, session) {
       
       if (input$tipo_data == TRUE) {
         
-        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", input$pais,"_",input$state, "_ne/date.vector.txt"))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", input$pais,"_",input$state, "_ne/date.vector.txt"))$V1
         
       } else{
         
-        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", input$pais,"_",input$state, "_de/date.vector.txt"))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", input$pais,"_",input$state, "_de/date.vector.txt"))$V1
         
       }
     }
@@ -200,10 +200,10 @@ server <- function(input, output, session) {
   #   return(arquivo)
   # })
   
-  output$distPlot <- renderPlot({
+  output$distPlot <- renderUI({
     
-    dates = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/date.vector.txt"))
-    readPNG(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/", dates[input$bins], ".png"))
+    tags$img(src = paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_", ifelse(input$tipo_data, "n", "d"), "/", input$bins, ".png"))
+    # png::readPNG(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/", input$bins, ".png")))
     
   })
 }
