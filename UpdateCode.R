@@ -169,7 +169,7 @@ plot_graph = function(ajuste, dates, dates_14, seq_y, lab_y, is.state = FALSE, d
 }
 
 last.date = as.Date("2022-12-31")
-countries_orig = countries_orig[-1]
+
 for(country in countries_orig){
   
   local_rds = str_replace_all(country, " ", "-")
@@ -221,7 +221,7 @@ for(country in countries_orig){
     }
     
     date.vector = names(rds_completo)
-    save(dates, paste0("GraphsPng/", local_rds, "_", metric, "/date.vector.RData"))
+    write(date.vector, paste0("GraphsPng/", local_rds, "_", metric, "/date.vector.txt"))
     
   }
   
@@ -281,7 +281,7 @@ for(state in statesBR){
     }
     
     date.vector = names(rds_completo)
-    save(dates, paste0("GraphsPng/", local_rds, "_", metric, "/date.vector.RData"))
+    write(date.vector, paste0("GraphsPng/", local_rds, "_", metric, "/date.vector.txt"))
     
   }
   
