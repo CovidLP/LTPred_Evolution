@@ -220,6 +220,9 @@ for(country in countries_orig){
       
     }
     
+    date.vector = names(rds_completo)
+    save(dates, paste0("GraphsPng/", local_rds, "_", metric, "/date.vector.RData"))
+    
   }
   
   closeAllConnections()
@@ -276,6 +279,9 @@ for(state in statesBR){
       plot_graph(ajuste, dates, dates_14, seq_y, lab_y, is.state = TRUE)
       
     }
+    
+    date.vector = names(rds_completo)
+    save(dates, paste0("GraphsPng/", local_rds, "_", metric, "/date.vector.RData"))
     
   }
   

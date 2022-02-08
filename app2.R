@@ -110,7 +110,7 @@ ui <- fluidPage(
 
 
 # Define server logic required to draw a histogram
-server <- function(input, output,session) {
+server <- function(input, output, session) {
   
   observeEvent(input$pais, {
     if(input$pais == "Brazil") {
