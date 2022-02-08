@@ -22,7 +22,7 @@ ui <- fluidPage(
   #       "Evolução da previsão COVID-19 - DEST/UFMG"
   #     )
   #   )),
- 
+  
   fluidRow(
     column(width = 10, offset = 1,
            wellPanel(
@@ -42,28 +42,28 @@ ui <- fluidPage(
     column(width=5,
            align='right',
            div(
-      class = "btn_div",
-      shinyWidgets::pickerInput(inputId = "pais", label = NULL,
-                                choices =c(
-                                  "Argentina", "Australia","Belgium",
-                                  "Bolivia","Brazil", "Canada",
-                                  "Chile","China","Colombia",
-                                  "Costa Rica","Ecuador","Ethiopia",
-                                  "France","Germany","Greece","Guatemala",
-                                  "Honduras","India","Indonesia",
-                                  "Iraq","Ireland","Italy",
-                                  "Japan","Mexico","Morocco",
-                                  "Netherlands","New Zealand","Norway",
-                                  "Panama","Paraguay","Peru",
-                                  "Poland","Portugal","Romania",
-                                  "Russia","Saudi Arabia","South Africa",
-                                  "South Korea","Spain","Sweden",
-                                  "Switzerland","Turkey","Ukraine",
-                                  "United Kingdom","United States of America",
-                                  "Uruguay","Venezuela"
-                                ) ,
-                                selected = "Brazil")
-    )),
+             class = "btn_div",
+             shinyWidgets::pickerInput(inputId = "pais", label = NULL,
+                                       choices =c(
+                                         "Argentina", "Australia","Belgium",
+                                         "Bolivia","Brazil", "Canada",
+                                         "Chile","China","Colombia",
+                                         "Costa Rica","Ecuador","Ethiopia",
+                                         "France","Germany","Greece","Guatemala",
+                                         "Honduras","India","Indonesia",
+                                         "Iraq","Ireland","Italy",
+                                         "Japan","Mexico","Morocco",
+                                         "Netherlands","New Zealand","Norway",
+                                         "Panama","Paraguay","Peru",
+                                         "Poland","Portugal","Romania",
+                                         "Russia","Saudi Arabia","South Africa",
+                                         "South Korea","Spain","Sweden",
+                                         "Switzerland","Turkey","Ukraine",
+                                         "United Kingdom","United States of America",
+                                         "Uruguay","Venezuela"
+                                       ) ,
+                                       selected = "Brazil")
+           )),
     column(width = 2,
            align="center",
            div(
@@ -73,10 +73,10 @@ ui <- fluidPage(
     column(width=5,
            align='left',
            div(
-      class = "btn_div",
-      shinyWidgets::pickerInput(inputId = "state", label = NULL, choices = "<all>", selected = "<all>"),
-    ))),
-    
+             class = "btn_div",
+             shinyWidgets::pickerInput(inputId = "state", label = NULL, choices = "<all>", selected = "<all>"),
+           ))),
+  
   fluidRow(
     align = "center",
     switchInput(
@@ -90,13 +90,13 @@ ui <- fluidPage(
   
   # Show a plot of the generated distribution
   fluidRow(align = "center",
-           plotOutput("distPlot")),
+           imageOutput("distPlot")),
   fluidRow(
     align = "center",
     sliderTextInput(
       "bins",
       "Data:",
-      choices = names(readRDS(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/Graphs/Brazil_n_graph.rds")))),
+      choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/Brazil_n/date.vector.txt")),
       animate = animationOptions(
         interval = 500,
         loop = FALSE,
@@ -117,7 +117,7 @@ server <- function(input, output, session) {
       states <-c("AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT","PA",
                  "PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO")
     } else { 
-        states <- NULL
+      states <- NULL
     }
     
     states <- c("<all>", states)
@@ -128,34 +128,36 @@ server <- function(input, output, session) {
   
   
   observeEvent(c(input$pais,input$state,input$tipo_data), {
-
+    
     if (input$pais!="Brazil") {
       if (input$tipo_data == TRUE) {
-        choices = names(readRDS(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/Graphs/",str_replace_all(input$pais," ","-"), "_n_graph.rds"))))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/date.vector.txt"))
       } else{
-        choices = names(readRDS(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/Graphs/",str_replace_all(input$pais," ","-"), "_d_graph.rds"))))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_d/date.vector.txt"))
       }
     }
     
     else if (input$state=="<all>") {
       if (input$tipo_data == TRUE) {
         
-        choices = names(readRDS(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/Graphs/",str_replace_all(input$pais," ","-"), "_n_graph.rds"))))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/date.vector.txt"))
         
       } else{
         
-        choices = names(readRDS(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/Graphs/",str_replace_all(input$pais," ","-"), "_d_graph.rds"))))
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_d/date.vector.txt"))
         
       }
-     
+      
     } else{
       
       if (input$tipo_data == TRUE) {
         
-        choices = names(readRDS(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/Graphs/",input$pais,"_",input$state, "_ne_graph.rds"))))
-
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", input$pais,"_",input$state, "_ne/date.vector.txt"))
+        
       } else{
-        choices = names(readRDS(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/Graphs/",input$pais,"_",input$state, "_de_graph.rds"))))
+        
+        choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", input$pais,"_",input$state, "_de/date.vector.txt"))
+        
       }
     }
     updateSliderTextInput(
@@ -166,41 +168,43 @@ server <- function(input, output, session) {
   }, ignoreInit = TRUE)
   
   
-  arquivo = reactive({
-    pais=as.character(input$pais)
-    pais=str_replace_all(pais," ","-")
-    if (pais!="Brazil") {
-      if (input$tipo_data == TRUE) {
-        endfile = "_n_graph.rds"
-      } else{
-        endfile = "_d_graph.rds"
-      }
-      arquivo = paste0(pais, endfile)
-    }
-    else if (input$state=="<all>") {
-      if (input$tipo_data == TRUE) {
-        endfile = "_n_graph.rds"
-      } else{
-        endfile = "_d_graph.rds"
-      }
-      arquivo = paste0(pais, endfile)
-    } else{
-      startfile = paste0(pais,"_")
-      state=as.character(input$state)
-      if (input$tipo_data == TRUE) {
-        endfile = "_ne_graph.rds"
-      } else{
-        endfile = "_de_graph.rds"
-      }
-      
-      arquivo = paste0(startfile, state, endfile)
-    }
-    return(arquivo)
-  })
+  # arquivo = reactive({
+  #   pais=as.character(input$pais)
+  #   pais=str_replace_all(pais," ","-")
+  #   if (pais!="Brazil") {
+  #     if (input$tipo_data == TRUE) {
+  #       endfile = "_n_graph.rds"
+  #     } else{
+  #       endfile = "_d_graph.rds"
+  #     }
+  #     arquivo = paste0(pais, endfile)
+  #   }
+  #   else if (input$state=="<all>") {
+  #     if (input$tipo_data == TRUE) {
+  #       endfile = "_n_graph.rds"
+  #     } else{
+  #       endfile = "_d_graph.rds"
+  #     }
+  #     arquivo = paste0(pais, endfile)
+  #   } else{
+  #     startfile = paste0(pais,"_")
+  #     state=as.character(input$state)
+  #     if (input$tipo_data == TRUE) {
+  #       endfile = "_ne_graph.rds"
+  #     } else{
+  #       endfile = "_de_graph.rds"
+  #     }
+  #     
+  #     arquivo = paste0(startfile, state, endfile)
+  #   }
+  #   return(arquivo)
+  # })
+  
   output$distPlot <- renderPlot({
-    ajustes <- readRDS(url(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/Graphs/",as.character(arquivo()))))
-    seqDate = names(ajustes)
-    ajustes[[input$bins]]
+    
+    dates = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/date.vector.txt"))
+    readPNG(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", str_replace_all(input$pais," ","-"), "_n/", dates[input$bins], ".png"))
+    
   })
 }
 
