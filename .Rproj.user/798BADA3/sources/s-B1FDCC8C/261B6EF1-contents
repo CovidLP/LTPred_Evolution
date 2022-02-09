@@ -1,0 +1,7 @@
+x = png::readPNG("GraphsPng/Argentina_n/2022-02-04.png")
+
+x1 = as.raster(x)
+plot()
+plot(c(100, 250), c(300, 450), type = "n", xlab = "", ylab = "")
+rasterImage(x1, 100, 300, 150, 350, interpolate = TRUE)
+
