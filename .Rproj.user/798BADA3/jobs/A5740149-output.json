@@ -1,0 +1,5 @@
+[1,"=> library(shiny); runApp('PredEvolution.R')\n\n"]
+[2,"Error in parse(file, keep.source = FALSE, srcfile = src, encoding = enc) : \r\n  C:/Users/55219/Desktop/2022/CovidLP/LTPred_Evolution/PredEvolution.R:110:4: ')' inesperado\r\n109:     \r\n110:   ))\r\n        ^\r\n"]
+[2,"Possible extra comma at:\r\n79:             shinyWidgets::pickerInput(inputId = \"state\", label = NULL, choices = \"<all>\", selected = \"<all>\"),\r\n                                                                                                                 ^\r\nPossible unmatched ')' at:\r\n110:  ))\r\n       ^\r\nError in sourceUTF8(fullpath, envir = new.env(parent = sharedEnv)) : \r\n  Error sourcing C:\\Users\\55219\\AppData\\Local\\Temp\\Rtmpiyg1rn\\file62787e6c30bc\r\nCalls: runApp ... shinyAppFile -> shinyAppDir_appR -> appObj -> func -> sourceUTF8\r\n"]
+[2,"Execução interrompida\r\n"]
+[1,"\nShiny application failed.\n\n"]
