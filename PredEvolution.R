@@ -164,7 +164,7 @@ ui <- fluidPage(
            sliderTextInput(
              "bins",
              "Data:",
-             choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/Argentina_n/date.vector.txt"))$V1,
+             choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/Brazil_n/date.vector.txt"))$V1,
              animate = animationOptions(
                interval = 750,
                loop = FALSE,
