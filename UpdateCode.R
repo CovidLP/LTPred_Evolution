@@ -184,6 +184,8 @@ for(country in countries_orig){
       title.name = "- Mortes/Deaths"
     }
     
+    if(!dir.exists(paste0("GraphsPng/", local_rds, "_", metric, "/"))) dir.create(paste0("GraphsPng/", local_rds, "_", metric, "/"))
+
     # Reading rds e downloading data
     data = load_covid(country)$data
     
@@ -244,6 +246,8 @@ for(state in statesBR){
       title.name = "- Mortes/Deaths"
     }
     
+    if(!dir.exists(paste0("GraphsPng/", local_rds, "_", metric, "/"))) dir.create(paste0("GraphsPng/", local_rds, "_", metric, "/"))
+    
     # Reading rds e downloading data
     data = load_covid("Brazil", state_name = state)$data
     
@@ -276,7 +280,7 @@ for(state in statesBR){
     for(i in 1:n_ajustes){
       
       ajuste = rds_completo[[i]]
-      plot_graph(ajuste, dates, dates_14, seq_y, lab_y, is.state = TRUE)
+      plot_graph(ajuste, dates, dates_14, seq_y, lab_y, is.state = TRUE, date2save = names(rds_completo)[i])
       
     }
     

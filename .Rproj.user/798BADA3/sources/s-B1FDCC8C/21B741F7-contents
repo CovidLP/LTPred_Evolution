@@ -1,8 +1,0 @@
-download.graphs
-
-dates = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/Argentina_n/date.vector.txt"))$V1
-
-i = 1
-download.file(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/Argentina_n/", dates[i], ".png"),
-              destfile = paste0("cache/", dates[i], ".png"), mode = 'wb')
-

@@ -5,10 +5,10 @@ account: izabelnolau
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5578989
-bundleId: 5562753
+bundleId: 5566655
 url: https://izabelnolau.shinyapps.io/LTPred_Evolution/
-when: 1644443190.65922
-lastSyncTime: 1644443190.65922
+when: 1644533118.08879
+lastSyncTime: 1644533118.08879
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: UpdateCode.R|Graphs|GraphsPng|History
+ignoredFiles: Teste/app.R|UpdateCode.R|Graphs|GraphsPng|History
