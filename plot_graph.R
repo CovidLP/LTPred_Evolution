@@ -19,13 +19,13 @@ plot_graph = function(ajuste, dates, dates_month, seq_y, lab_y, is.state = FALSE
     
     plot(ajuste_df[, c("date", "y")], col = NA, ylim = c(0, max(seq_y)),
          bty = "n", axes = FALSE, xlab = "", ylab = "", cex.main = 0.9,
-         main = paste("Brazil /", state, title.name))
+         main = paste("Brazil /", state, title.name), xlim = c(as.Date("2020-01-01"), last.date))
     
   } else{
     
     plot(ajuste_df[, c("date", "y")], col = NA, ylim = c(0, max(seq_y)),
          bty = "n", axes = FALSE, xlab = "", ylab = "", cex.main = 0.9,
-         main = paste(country, title.name))
+         main = paste(country, title.name), xlim = c(as.Date("2020-01-01"), last.date))
     
   }
   
