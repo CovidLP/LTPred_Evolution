@@ -65,7 +65,7 @@ ui <- fluidPage(
     fluidRow(
         column(width = 10, offset = 1,
                wellPanel(
-                   h4("Selecione o pais/estado que deseja investigar.", style = "text-align: center;"),
+                   h4("Selecione o $country/estado que deseja investigar.", style = "text-align: center;"),
                    h4("Select a country/state to analyse.", style = "text-align: center;"),
                    HTML("<center><a href = 'http://est.ufmg.br/covidlp/home/pt/' style = 'color: #00b1d8; text-decoration: underline;'>Sobre/About</a> | <a href = 'http://est.ufmg.br/covidlp/home/pt/metodologia' style = 'color: #00b1d8; text-decoration: underline;'>Metodologia/Methodology</a></center>"),
                    # h5(sprintf("Ultima atualizacao/last update: %s", Sys.Date()), style = "text-align: center;"),
@@ -83,7 +83,7 @@ ui <- fluidPage(
                align='right',
                div(
                    class = "btn_div",
-                   shinyWidgets::pickerInput(inputId = "pais", label = NULL,
+                   shinyWidgets::pickerInput(inputId = "country", label = NULL,
                                              choices =c(
                                                  "Argentina", "Australia","Belgium",
                                                  "Bolivia","Brazil", "Canada",
@@ -131,7 +131,7 @@ ui <- fluidPage(
     div(
         class = "btn_div",
         radioGroupButtons(
-            inputId = "metrics",
+            inputId = "metrics_EV",
             label = NULL,
             choices = c("Confirmados/Confirmed" = "Confirmed", "Mortes/Deaths" = "Deaths" ),
             status = "primary", 
@@ -141,13 +141,12 @@ ui <- fluidPage(
                 no = icon("remove",lib = "glyphicon")
             )
         )
-        # bsTooltip(id = "metrics",
+        # bsTooltip(id = "metrics_EV",
         #           title = HTML("Selecione uma das métricas para ser apresentada. <br> Select one metric to display."),
         #           placement = "right", 
         #           options = list(container = "body")
         # )
     ),
-    
     
     # fluidRow(
     #   align = "center",
@@ -196,11 +195,11 @@ server <- function(input, output, session) {
             local = paste0("Brazil_",
                            as.character(input$state),
                            "_",
-                           ifelse(input$metrics == "Confirmed", "ne", "de"))
+                           ifelse(input$metrics_EV == "Confirmed", "ne", "de"))
         } else{
-            local = paste0(str_replace_all(input$pais," ","-"),
+            local = paste0(str_replace_all(input$country," ","-"),
                            "_",
-                           ifelse(input$metrics == "Confirmed", "n", "d"))
+                           ifelse(input$metrics_EV == "Confirmed", "n", "d"))
         }
         
         choices = read.table(paste0("https://github.com/CovidLP/LTPred_Evolution/raw/main/GraphsPng/", local, "/date.vector.txt"))$V1
@@ -214,8 +213,8 @@ server <- function(input, output, session) {
         
     })
     
-    observeEvent(input$pais, {
-        if(input$pais == "Brazil") {
+    observeEvent(input$country, {
+        if(input$country == "Brazil") {
             states <-c("AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT","PA",
                        "PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO")
         } else { 
@@ -238,11 +237,11 @@ server <- function(input, output, session) {
             local = paste0("Brazil_",
                            as.character(input$state),
                            "_",
-                           ifelse(input$metrics == "Confirmed", "ne", "de"))
+                           ifelse(input$metrics_EV == "Confirmed", "ne", "de"))
         } else{
-            local = paste0(str_replace_all(input$pais," ","-"),
+            local = paste0(str_replace_all(input$country," ","-"),
                            "_",
-                           ifelse(input$metrics == "Confirmed", "n", "d"))
+                           ifelse(input$metrics_EV == "Confirmed", "n", "d"))
         }
         
         out = paste0(url_init, local, "/", as.character(input$bins), ".png")

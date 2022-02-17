@@ -1,6 +1,6 @@
 plot_graph = function(ajuste, dates, dates_month, seq_y, lab_y, is.state = FALSE, date2save){
   
-  png(paste0("GraphsPng/", local_rds, "_", metric, "/", date2save, ".png"), width = 850, height = 600, res = 120)
+  png(paste0("GraphsPng/", local_rds, "_", metric, "/", date2save, ".png"), width = 1000, height = 600, res = 120)
   
   par(mar = c(3.5, 3, 2, 0))
   ajuste_df = suppressMessages(dates %>%
